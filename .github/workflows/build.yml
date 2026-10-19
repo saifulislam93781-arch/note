@@ -22,19 +22,15 @@ jobs:
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@v3
 
-    - name: Build Debug APK inside note folder
-      working-directory: ./note
+    - name: Build Debug APK
       run: |
-        if [ -f "./gradlew" ]; then
-          chmod +x ./gradlew
-          ./gradlew assembleDebug --stacktrace
-        else
-          gradle assembleDebug --stacktrace
-        fi
+        find . -maxdepth 3 -name "gradlew" -exec chmod +x {} \;
+        find . -maxdepth 3 -name "gradlew" -execdir ./gradlew assembleDebug --stacktrace \;
 
     - name: Upload APK
       uses: actions/upload-artifact@v4
       if: always()
       with:
         name: Note-Debug-APK
-        path: note/app/build/outputs/apk/debug/*.apk
+        path: |
+          **/build/outputs/apk/debug/*.apk
