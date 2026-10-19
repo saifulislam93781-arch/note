@@ -22,13 +22,14 @@ jobs:
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@v3
 
-    - name: Build Debug APK with Gradle Wrapper Fallback
+    - name: Build Debug APK inside note folder
+      working-directory: ./note
       run: |
         if [ -f "./gradlew" ]; then
           chmod +x ./gradlew
-          ./gradlew assembleDebug
+          ./gradlew assembleDebug --stacktrace
         else
-          gradle assembleDebug
+          gradle assembleDebug --stacktrace
         fi
 
     - name: Upload APK
@@ -36,5 +37,4 @@ jobs:
       if: always()
       with:
         name: Note-Debug-APK
-        path: |
-          **/build/outputs/apk/debug/*.apk
+        path: note/app/build/outputs/apk/debug/*.apk
