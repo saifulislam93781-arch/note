@@ -22,15 +22,15 @@ jobs:
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@v3
 
-    - name: Build Debug APK
+    - name: Find and Build APK
       run: |
-        find . -maxdepth 3 -name "gradlew" -exec chmod +x {} \;
-        find . -maxdepth 3 -name "gradlew" -execdir ./gradlew assembleDebug --stacktrace \;
+        # প্রজেক্টের যেকোনো জায়গা থেকে gradlew খুঁজে বের করে পারমিশন দিয়ে বিল্ড করবে
+        find . -name "gradlew" -exec chmod +x {} \;
+        find . -name "gradlew" -execdir ./gradlew assembleDebug --stacktrace \;
 
-    - name: Upload APK
+    - name: Upload APK Artifact
       uses: actions/upload-artifact@v4
-      if: always()
       with:
         name: Note-Debug-APK
         path: |
-          **/build/outputs/apk/debug/*.apk
+          **/app/build/outputs/apk/debug/*.apk
